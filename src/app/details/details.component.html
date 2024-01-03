@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Film Details</title>
+    <!-- Bootstrap CSS -->
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+      integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+      crossorigin="anonymous"
+    />
+    <style>
+      body {
+        background-color: #f8f9fa;
+        color: #495057;
+      }
+
+      .container {
+        margin-top: 20px;
+        background-color: #ffffff;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+      }
+
+      .lead {
+        font-size: 1.2rem;
+      }
+
+      .badge-primary {
+        background-color: #007bff;
+      }
+
+      .list-group-item {
+        border: 1px solid #dee2e6;
+        margin-top: 10px;
+      }
+
+      .list-group-item:hover {
+        background-color: #f8f9fa;
+      }
+
+      .card {
+        border: 1px solid #dee2e6;
+        margin-bottom: 10px;
+      }
+
+      .card:hover {
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+
+      .card-title {
+        font-size: 1.5rem;
+        color: #007bff;
+      }
+
+      .card-text {
+        color: #495057;
+      }
+
+      .btn-primary {
+        background-color: #007bff;
+      }
+
+      .btn-primary:hover {
+        background-color: #0056b3;
+      }
+
+      .btn-danger {
+        background-color: #dc3545;
+      }
+
+      .btn-danger:hover {
+        background-color: #c82333;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container mt-2">
+      <div class="row">
+        <div class="col-md-8 col-lg-6 center my-3">
+          <div class="movie-poster-container">
+            <img
+              class="movie-poster"
+              src="https://image.tmdb.org/t/p/w500/{{
+                filmdetails.poster_path
+              }}"
+              alt="{{ filmdetails.title }}"
+            />
+          </div>
+          <div *ngFor="let gn of genre" class="d-inline-block mx-3 mt-3">
+            <span class="badge badge-primary" style="font-size: 1.5rem">{{
+              gn.name
+            }}</span>
+          </div>
+        </div>
+        <div class="col-lg-6">
+          <table class="table table-bordered">
+            <tbody>
+              <tr>
+                <th scope="row">Title</th>
+                <td>{{ filmdetails.title }}</td>
+              </tr>
+              <tr>
+                <th scope="row">Release Date</th>
+                <td>{{ filmdetails.release_date }}</td>
+              </tr>
+              <tr>
+                <th scope="row">Tagline</th>
+                <td>{{ filmdetails.tagline }}</td>
+              </tr>
+              <tr>
+                <th scope="row">Overview</th>
+                <td>{{ filmdetails.overview }}</td>
+              </tr>
+              <tr>
+                <th scope="row">Runtime</th>
+                <td>{{ filmdetails.runtime }} minutes</td>
+              </tr>
+              <tr>
+                <th scope="row">Popularity</th>
+                <td>{{ filmdetails.popularity }}</td>
+              </tr>
+              <tr>
+                <th scope="row">Vote Average</th>
+                <td>{{ filmdetails.vote_average }}</td>
+              </tr>
+              <tr>
+                <th scope="row">Budget</th>
+                <td>{{ filmdetails.budget }}$</td>
+              </tr>
+              <tr>
+                <th scope="row">Original Title</th>
+                <td>{{ filmdetails.original_title }}</td>
+              </tr>
+              <tr>
+                <th scope="row">Language</th>
+                <td>{{ filmdetails.original_language }}</td>
+              </tr>
+              <tr>
+                <th scope="row">Adult</th>
+                <td>{{ filmdetails.adult ? "Yes" : "No" }}</td>
+              </tr>
+              <tr>
+                <th scope="row">Vote Count</th>
+                <td>{{ filmdetails.vote_count }}</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <!--<div class="NgxEditor__Wrapper mb-5 mt-2" style="height: 200px">
+        <ngx-editor-menu [editor]="editor" > </ngx-editor-menu>
+        <ngx-editor [editor]="editor" [ngModel]="html"  [disabled]="false"  [placeholder]="'Type here...'"></ngx-editor>
+      </div>
+      <button class="btn btn-primary" (click)="submitEditorContent()">Submit Content</button>-->
+        </div>
+      </div>
+    </div>
+
+    <div class="container mt-4">
+      <div class="row text-center">
+        <div class="col-md-8">
+          <h3 class="mb-3"></h3>
+          <!-- Add a form for submitting comments -->
+          <form (ngSubmit)="submit_commentaire()" #commentForm="ngForm">
+            <div class="mb-3">
+              <label for="nom" class="form-label">Email</label>
+              <input
+                type="text"
+                class="form-control"
+                id="nom"
+                [(ngModel)]="formData.nom"
+                name="nom"
+                [readonly]="isAuthenticated"
+                placeholder="Enter a Title"
+              />
+            </div>
+            <div class="mb-3">
+              <label for="comment" class="form-label">Leave a Comment:</label>
+              <div class="ngx-editor-container">
+                <ngx-editor
+                  style="height: 200px"
+                  [editor]="editor"
+                  [ngModel]="html"
+                  [disabled]="false"
+                  id="comment"
+                  [(ngModel)]="formData.comment"
+                  name="comment"
+                  [placeholder]="'Type here...'"
+                  required
+                ></ngx-editor>
+              </div>
+              <div
+                *ngIf="
+                  commentForm.controls['comment']?.invalid &&
+                  (commentForm.controls['comment']?.dirty ||
+                    commentForm.controls['comment']?.touched)
+                "
+              >
+                <small class="text-danger">Please enter a comment.</small>
+              </div>
+            </div>
+
+            <button
+              type="submit"
+              class="btn btn-primary"
+              [disabled]="!commentForm.valid || !formData.comment"
+              (click)="onAddComment()"
+            >
+              Submit Comment
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div class="container mt-4 mb-4">
+      <h3 class="form-label">Comments Section</h3>
+      <div class="comment-section">
+        <div *ngFor="let comment of commentaireFiltred" class="comment">
+          <div class="comment-header">
+            <div class="comment-info">
+              <strong>{{ comment.name }}</strong>
+              <div class="comment-actions">
+                <button
+                  *ngIf="
+                    comment.name === userLoginService.getEmailFromLocalStorage()
+                  "
+                  type="button"
+                  class="btn btn-danger"
+                  (click)="deleteComment(comment.id)"
+                >
+                  Delete
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="comment-body">
+            <p [innerHTML]="sanitizeHTML(comment.commentaire)"></p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bootstrap JS (optional) -->
+    <script
+      src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+      integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+      integrity="sha384-Uo6zC/DJaqUnIj/3+J46jsqHy2lOq1n1l4paViJ3jKDaQQlmh/j5K438+1Ushx1x"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+      integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>

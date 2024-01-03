@@ -1,0 +1,15 @@
+<body class="mt-5">
+  <div class="container mt-4">
+    <div class="d-flex">
+      <div class="row">
+        <!-- Use *ngFor to iterate over films -->
+        <app-film-card
+          class="col-6 col-lg-4"
+          *ngFor="let film of filmsfiltred"
+          [film]="film"
+
+        ></app-film-card>
+      </div>
+    </div>
+  </div>
+</body>

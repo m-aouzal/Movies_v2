@@ -1,0 +1,144 @@
+<body>
+  <div *ngIf="!pageNotFound">
+    <mat-toolbar class="headToolBar">
+      <mat-toolbar-row fxLayout="row" fxLayoutAlign="space-between center">
+        <button
+          mat-icon-button
+          (click)="sidenav.toggle()"
+          id="menuIcon"
+          aria-label="Example icon-button with menu icon"
+        >
+          <mat-icon>menu</mat-icon>
+        </button>
+
+        <div style="margin-left: 10px">
+          <button
+            (click)="navigateToHomePage()"
+            mat-button
+            class="brand-button"
+            style="font-size: larger"
+          >
+            EMI<span style="color: #0652dd">FLEX</span>
+          </button>
+          <svg
+            [style]="{ 'margin-bottom': '2px' }"
+            xmlns="http://www.w3.org/2000/svg"
+            width="8"
+            height="8"
+            viewBox="0 0 16 16"
+            fill="none"
+            style="vertical-align: text-bottom"
+          >
+            <circle cx="8" cy="8" r="8" fill="#0652DD" />
+          </svg>
+        </div>
+
+        <div fxLayout="row" fxLayoutGap="16px">
+          <span>
+            <input
+              class="form-control me-4"
+              type="search"
+              placeholder="Search movie"
+              aria-label="Search"
+              #filter
+              (input)="filterResults(filter.value)"
+              style="border-width: 2px"
+            />
+          </span>
+
+          <span>
+            <button
+              mat-button
+              class="top-menu-item"
+              (click)="onOpenFavorites()"
+            >
+              My favorites
+            </button>
+          </span>
+
+          <span *ngIf="!isAuthenticated">
+            <button mat-button class="top-menu-item" (click)="onLogin()">
+              Sign Up / Login
+            </button>
+          </span>
+          <span>
+            <button
+              mat-button
+              class="top-menu-item"
+              (click)="navigateToAboutPage()"
+            >
+              About Us
+            </button>
+          </span>
+
+          <span *ngIf="isAuthenticated">
+            <button mat-button class="top-menu-item" (click)="onLogout()">
+              Logout
+            </button>
+          </span>
+        </div>
+      </mat-toolbar-row>
+    </mat-toolbar>
+    <mat-divider></mat-divider>
+  </div>
+  <mat-sidenav-container autosize>
+    <mat-sidenav
+      #sidenav
+      position="start"
+      [fixedInViewport]="true"
+      [fixedTopGap]="60"
+      mode="over"
+      class="headToolBar"
+    >
+      <div class="side-nav-items">
+        <div>
+          <a
+            (click)="sidenav.close()"
+            mat-button
+            class="side-menu-item"
+            (click)="navigateToHomePage()"
+            ><mat-icon>home</mat-icon>Home</a
+          >
+          <a
+            (click)="sidenav.close()"
+            mat-button
+            class="side-menu-item"
+            (click)="onOpenFavorites()"
+            ><mat-icon>settings_applications</mat-icon>My Favorites</a
+          >
+          <a
+            (click)="sidenav.close()"
+            mat-button
+            class="side-menu-item"
+            (click)="onLogin()"
+            *ngIf="!isAuthenticated"
+          >
+            <mat-icon>group_add</mat-icon>Sign Up / Login
+          </a>
+          <a
+            (click)="sidenav.close()"
+            mat-button
+            class="side-menu-item"
+            (click)="navigateToAboutPage()"
+          >
+            <mat-icon>info</mat-icon>About Us
+          </a>
+          <a
+            (click)="sidenav.close()"
+            mat-button
+            class="side-menu-item"
+            (click)="onLogout()"
+            *ngIf="!!isAuthenticated"
+          >
+            <mat-icon>lock_open</mat-icon>Logout
+          </a>
+        </div>
+      </div>
+    </mat-sidenav>
+    <mat-sidenav-content style="background-color: white !important">
+      <div class="mb-5" [ngClass]="{ 'container-all': pageNotFound }">
+        <router-outlet></router-outlet>
+      </div>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+</body>
